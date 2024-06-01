@@ -4,7 +4,7 @@ const bodyParser = require('body-parser');
 const { PORT } = require('./config/serverConfig');
 const apiRoutes = require('./routes/index');
 
-//const UserService = require('./services/user-service');
+const db = require('./models/index');
 
 const app = express();
 
@@ -17,11 +17,14 @@ const prepareAndStartServer = () => {
 
     app.listen(PORT, async () => {
         console.log(`Server Started on Port: ${PORT}`);
+        if(process.env.DB_SYNC) {
+            db.sequelize.sync({alter: true});
+        }
         
         // const service = new UserService();
-        // const newToken = service.createToken({email: 'aman@gmail.com', id: 1});
+        // const newToken = service.createToken({email: 'sanket@admin.com', id: 1});
         // console.log("new token is", newToken);
-        // const token='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFtYW5AZ21haWwuY29tIiwiaWQiOjEsImlhdCI6MTcxNjc0OTM3MSwiZXhwIjoxNzE2ODM1NzcxfQ.wib8F4RPkiQ_ObZPTu8CZodQ3ULRhxjHzhM4RnQnduI';
+        // const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InNhbmtldEBhZG1pbi5jb20iLCJpZCI6MSwiaWF0IjoxNjcxNjM1MTgxLCJleHAiOjE2NzE2MzUyMTF9.vuo6QmYm6TmL2P2rBXoNDbPi1st5ZVrK4Yf2Jz-Dpzs';
         // const response = service.verifyToken(token);
         // console.log(response);
     });
